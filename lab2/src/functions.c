@@ -48,7 +48,8 @@ StatusCode find_n_prime(long n, long* result) {
     int count = 0;
     for (long i = 2; i < limit && count < n; i++) {
         if (sieve[i]) {
-            primes[count++] = i;
+            primes[count] = i;
+            count++;
         }
     }
     free(sieve);

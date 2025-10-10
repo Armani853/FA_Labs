@@ -1,4 +1,4 @@
-project(lab2)
+project(lab3)
 
 add_executable(lab_03_run src/main.c src/functions.c)
 

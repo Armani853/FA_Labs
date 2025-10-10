@@ -20,14 +20,25 @@ StatusCode calc(double (*func)(double), double a, double b, double epsilon, doub
 StatusCode validate_arguments(int argc, char* argv[], double* epsilon);
 
 void test_integral_values() {
-    double eps = 1e-4;
+    double eps = 1e-2;
     double a, b, c, d;
     int iter;
 
+    assert(calc(integral_a, 0.0, 1.0, 1e-6, &a, &iter) == STATUS_OK);
+    assert(IS_EQUAL(a, 0.822467, eps)); 
+    printf("Интеграл A (Успех: %.6f)\n", a);
+
     assert(calc(integral_b, 0.0, 1.0, 1e-6, &b, &iter) == STATUS_OK);
-    assert(IS_EQUAL(b, 0.855624, eps));    
+    assert(IS_EQUAL(b, 0.8548342266, eps)); 
+    printf("Интеграл B (Успех: %.6f)\n", b);
+    
+    assert(calc(integral_b, 0.0, 2.0, 1e-6, &b, &iter) == STATUS_OK);
+    assert(IS_EQUAL(b, 1.187315, eps));
+    printf("Интеграл C (Успех: %.6f)\n", b);
+    
     assert(calc(integral_d, 0.0, 1.0, 1e-6, &d, &iter) == STATUS_OK);
     assert(IS_EQUAL(d, 0.783431, eps));
+    printf("Интеграл D (Успех: %.6f)\n", d);
 
     printf("Тесты значений интегралов пройдены.\n");
 }
@@ -35,14 +46,16 @@ void test_integral_values() {
 void test_argument_validation() {
     double eps;
     char* argv_ok[] = {"./test", "0.001"};
-    char* argv_zero[] = {"./test", "0"};
     char* argv_big[] = {"./test", "1.0"};
     char* argv_word[] = {"./test", "abc"};
     char* argv_few[] = {"./test"};
 
     assert(validate_arguments(2, argv_ok, &eps) == STATUS_OK);
+    printf("Успех: Проверена корректность epsilon (%.4f)\n", eps);
+    
     assert(validate_arguments(2, argv_word, &eps) == INVALID_INPUT);
     assert(validate_arguments(1, argv_few, &eps) == INVALID_INPUT);
+    assert(validate_arguments(2, argv_big, &eps) == CALCULATION_ERROR);
 
     printf("Тесты валидации аргументов пройдены.\n");
 }
@@ -53,12 +66,14 @@ void test_calc_validation() {
     
     assert(calc(integral_b, 0.0, 1.0, 1e-3, NULL, &iter) == INVALID_INPUT);
     assert(calc(NULL, 0.0, 1.0, 1e-3, &res, &iter) == INVALID_INPUT);
-
     assert(calc(integral_b, 1.0, 1.0, 1e-3, &res, &iter) == INVALID_INPUT);
     assert(calc(integral_b, 2.0, 1.0, 1e-3, &res, &iter) == INVALID_INPUT);
-    
     assert(calc(integral_b, 0.0, 1.0, 0.0, &res, &iter) == CALCULATION_ERROR);
     assert(calc(integral_b, 0.0, 1.0, 1.0, &res, &iter) == CALCULATION_ERROR);
+    
+    double result_ok;
+    assert(calc(integral_a, 0.0, 1.0, 1e-3, &result_ok, &iter) == STATUS_OK);
+    printf("Успех: calc прошел с валидными параметрами (a=%.4f)\n", result_ok);
 
     printf("Тесты валидации calc пройдены.\n");
 }

@@ -198,11 +198,6 @@ StatusCode check_right_triangle(double s1, double s2, double s3, double epsilon,
         return INVALID_INPUT;
     }
 
-    if (IS_LESS_OR_EQUAL(s1 + s2, s3, epsilon) || IS_LESS_OR_EQUAL(s1 + s3, s2, epsilon) || IS_LESS_OR_EQUAL(s2 + s3, s1, epsilon)) {
-        *is_right = false;
-        return STATUS_OK; 
-    }
-
     double max_side = fmax(s1, fmax(s2, s3));
     double a, b, c = max_side;
 
@@ -210,11 +205,11 @@ StatusCode check_right_triangle(double s1, double s2, double s3, double epsilon,
         a = s2;
         b = s3;
     } else if (IS_EQUAL(max_side, s2, epsilon)) {
-         a = s1;
-         b = s3;
+        a = s1;
+        b = s3;
     } else {
-         a = s1;
-         b = s2;
+        a = s1;
+        b = s2;
     }
 
     *is_right = IS_EQUAL(a * a + b * b, c * c, epsilon);

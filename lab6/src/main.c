@@ -16,10 +16,7 @@ int main(int argc, char* argv[]) {
     
     double (*functions[]) (double) = {integral_a, integral_b, integral_c, integral_d};
     const char* names[] = {
-        "∫₀¹ ln((1+x)/x) dx",
-        "∫₀¹ e^(-x²/2) dx", 
-        "∫₀¹ ln(1/(1-x)) dx",
-        "∫₀¹ x^x dx"
+        "Интеграл a", "Интеграл b", "Интеграл c", "Интеграл d"
     };
     const size_t num_integrals = sizeof(functions) / sizeof(functions[0]);
     
@@ -30,7 +27,6 @@ int main(int argc, char* argv[]) {
         status = calc(functions[i], 0.0, 1.0, epsilon, &result, &iterations);
         if (status == STATUS_OK) {
             printf("%s = %.10f\n", names[i], result);
-            printf("  Итераций: %zu, Точность: %g\n\n", iterations, epsilon);
         } else {
             printf("%s - ", names[i]);
             print_error(status);
