@@ -3,7 +3,6 @@
 #include <stdarg.h>
 #include <math.h>
 #define EPS 1.0e-15
-#define MAX_ITER 20
 #define IS_ZERO(val, eps) (fabs(val) < (eps))
 #define IS_EQUAL(fval, sval, eps) (fabs((fval) - (sval)) < (eps))
 #define IS_MORE(fval, sval, eps) (((fval) - (sval)) > (eps))
@@ -17,8 +16,14 @@ void print_res(const int base, const double epsilon, const int num_fractions, co
 
 StatusCode validate_base(const int base);
 
-StatusCode check_finite(const int base, const double epsilon, const int max_iter, bool* result_buffer, const int num_fractions, ...);
+StatusCode check_finite(const int base, const double epsilon, bool* result_buffer, const int num_fractions, ...);
 
 StatusCode validate_fraction(const double fraction, const double epsilon);
+
+int gcd(long long num, long long denom);
+
+StatusCode is_finite(const int base, long long num, long long denom, bool* res);
+
+
 
 

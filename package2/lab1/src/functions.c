@@ -43,18 +43,50 @@ StatusCode validate_fraction(const double fraction, const double epsilon) {
     return STATUS_OK;
 }
 
-StatusCode check_finite(const int base, const double epsilon, const int max_iter, bool* result_buffer, const int num_fractions, ...) {
-    if (result_buffer == NULL) {
+int gcd(long long num, long long denom) {
+    while (denom) {
+        long long temp = num % denom;
+        num = denom;
+        denom = temp;
+    }
+    return num;
+}
+
+StatusCode is_finite(const int base, long long num, long long denom, bool* res) {
+    if (base < 2 || num <= 0 || denom <= 0 || num >= denom || res == NULL) {
+        return INVALID_INPUT;
+    }
+    int temp_base = base;
+    long long com = gcd(num, denom);
+    denom /= com;
+    for (int i = 2; i * i <= temp_base; i++) {
+        if (temp_base % i == 0) {
+            while (denom % i == 0) {
+                denom /= i;
+            }
+            while (temp_base % i == 0) {
+                temp_base /= i;
+            }
+        }
+    }
+    if (temp_base > 1) {
+            while (denom % temp_base == 0) {
+                denom /= temp_base;
+            }
+        }
+    *res = (denom == 1);
+    return STATUS_OK;
+}
+
+StatusCode check_finite(const int base, const double epsilon, bool* result_buffer, const int num_fractions, ...) {
+    if (result_buffer == NULL || num_fractions <= 0 || epsilon <= 0) {
         return INVALID_INPUT;
     }
     StatusCode base_status = validate_base(base);
     if (base_status != STATUS_OK) {
         return base_status;
     } 
-
-    if (num_fractions <= 0 || max_iter <= 0 || epsilon <= 0) {
-        return INVALID_INPUT;
-    }
+    const long long PRECISION_POWER = 1000000000;
 
     va_list args;
     va_start(args, num_fractions);
@@ -65,17 +97,14 @@ StatusCode check_finite(const int base, const double epsilon, const int max_iter
             va_end(args);
             return INVALID_INPUT;
         }
-        double rem = curr;
-        bool is_fin = false;
-        for (int iter = 0; iter < max_iter; iter++) {
-            rem *= base;
-            double int_p;
-            double frac_p = modf(rem, &int_p);
-            rem = frac_p;
-            if (IS_EQUAL(rem, 0.0, epsilon)) {
-                is_fin = true;
-                break;
-            }
+
+        long long num = (long long)round(curr * (long double)PRECISION_POWER);
+        long long denom = PRECISION_POWER;
+        bool is_fin;
+        StatusCode check_status = is_finite(base, num, denom, &is_fin);
+        if (check_status != STATUS_OK) {
+            va_end(args);
+            return check_status;
         }
         result_buffer[i] = is_fin;
     }

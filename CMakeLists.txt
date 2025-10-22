@@ -11,4 +11,4 @@ add_subdirectory(package1/lab5)
 add_subdirectory(package1/lab6)
 add_subdirectory(package1/lab8)
 add_subdirectory(package2/lab1)
-
+add_subdirectory(package2/lab2)
