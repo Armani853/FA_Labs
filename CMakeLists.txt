@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.22)
 project(fundamental_algorithms)
 
 set(CMAKE_C_STANDARD 11)
@@ -13,3 +13,5 @@ add_subdirectory(package1/lab8)
 add_subdirectory(package2/lab1)
 add_subdirectory(package2/lab2)
 add_subdirectory(package2/lab5)
+add_subdirectory(package2/lab6)
+
