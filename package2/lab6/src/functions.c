@@ -152,7 +152,8 @@ StatusCode collection_load_from_file(Student_collection* c, const char* filepath
 
         int parsed_items = sscanf(line_buffer, "%u %s %s %s %u %u %u %u %u",
                                   &id, name, surname, group,
-                                  &grades_tmp[0], &grades_tmp[1], &grades_tmp[2], &grades_tmp[3], &grades_tmp[4]);
+                                  &grades_tmp[0], &grades_tmp[1], &grades_tmp[2], 
+                                  &grades_tmp[3], &grades_tmp[4]);
         if (parsed_items != 9) {
             st = READ_ERROR;
             return st;
@@ -221,7 +222,8 @@ const Student* search_by_id(const Student_collection* c, unsigned int id, Status
     return NULL;
 }
 
-StatusCode search_by_string(const Student_collection* c, const char* search_key, int field_type, const Student*** results, size_t* result_count) {
+StatusCode search_by_string(const Student_collection* c, const char* search_key, int field_type, 
+    const Student*** results, size_t* result_count) {
     if (c == NULL || search_key == NULL || results == NULL || result_count == NULL) {
         return INVALID_INPUT;
     }
